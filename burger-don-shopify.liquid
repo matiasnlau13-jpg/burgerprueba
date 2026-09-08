@@ -555,6 +555,18 @@
   .tk-card--accent { background: color-mix(in srgb, var(--accent) 9%, var(--surface)); }
   .tk-card--total { gap: 1rem; }
 
+  /* "Tu pedido": recuadro, letras y borde en rojo (el fondo queda igual). */
+  .tk-card--pedido {
+    border: 3px solid var(--accent);
+    color: var(--accent);
+    box-shadow: 0 12px 30px -14px color-mix(in srgb, var(--accent) 55%, transparent);
+  }
+  .tk-card--pedido .tk-title { color: var(--accent); font-size: 1rem; }
+  .tk-card--pedido .line,
+  .tk-card--pedido .line--sub,
+  .tk-card--pedido .ticket__empty { color: var(--accent); }
+  .tk-card--pedido .line--sub { border-top-color: var(--accent); }
+
   .tk-card__head { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
   .tk-title {
     font-family: "Space Mono", ui-monospace, monospace;
@@ -826,7 +838,7 @@
     <aside class="ticket-col">
       <div class="ticket" id="comanda" aria-label="Tu carrito">
 
-        <section class="tk-card">
+        <section class="tk-card tk-card--pedido">
           <div class="tk-card__head">
             <h2 class="tk-title">Tu pedido</h2>
             <span class="ticket__stamp" id="stamp">burgerprueba</span>
