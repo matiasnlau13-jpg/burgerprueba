@@ -1,7 +1,7 @@
 {%- comment -%}
   burgerprueba · sección para Shopify
   Pegá TODO este archivo en una sección "Custom Liquid" (Liquid personalizado)
-  desde el editor de temas. Editá el menú/WhatsApp/dirección en el bloque CONFIG (abajo del todo).
+  desde el editor de temas. Editá menú / WhatsApp / dirección en el bloque CONFIG (abajo del todo).
 {%- endcomment -%}
 
 <style>
@@ -554,54 +554,61 @@
   .line--flash { background: color-mix(in srgb, var(--accent) 16%, transparent); }
   .line__qty { color: var(--accent); font-weight: 700; }
 
-  .ticket__pay { border-top: 2px dashed var(--line-strong); padding: 0.9rem 1.25rem; display: grid; gap: 0.6rem; border-inline: 0; border-bottom: 0; margin: 0; }
-  .ticket__pay legend {
-    font-size: 0.72rem;
+  .ticket__sec {
+    border-top: 3px solid var(--line-strong);
+    padding: 1.1rem 1.25rem;
+    display: grid;
+    gap: 0.7rem;
+    border-inline: 0;
+    border-bottom: 0;
+    margin: 0;
+    min-inline-size: 0;
+  }
+  .ticket__sec legend,
+  .ticket__sec-title {
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 0.82rem;
+    font-weight: 700;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--ink-soft);
+    color: var(--ink);
     padding: 0;
+    margin: 0;
   }
-  .pay-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
-  .pay-opt {
+  #delivery-box { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+
+  .opt-pills { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+  .opt-pill {
     border: 2px solid var(--ink);
     border-radius: var(--radius);
-    padding: 0.55rem 0.6rem;
+    padding: 0.6rem 0.6rem;
     text-align: center;
     cursor: pointer;
-    font-size: 0.86rem;
+    font-size: 0.88rem;
+    font-weight: 600;
     background: var(--bg-2);
     transition: background 0.14s ease, color 0.14s ease;
   }
-  .pay-opt:has(input:checked) { background: var(--ink); color: var(--bg); }
-  .pay-opt:has(input:focus-visible) { outline: 3px solid var(--accent); outline-offset: 2px; }
-  .pay-opt input { position: absolute; opacity: 0; }
-  .pay-note { font-size: 0.78rem; color: var(--ink-soft); min-height: 1.1em; }
-  .pay-note b { color: var(--ink); }
+  .opt-pill:has(input:checked) { background: var(--ink); color: var(--bg); }
+  .opt-pill:has(input:focus-visible) { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .opt-pill input { position: absolute; opacity: 0; }
+  .opt-note { font-size: 0.78rem; color: var(--ink-soft); min-height: 1.1em; margin: 0; }
+  .opt-note b { color: var(--ink); }
 
-  .delivery-label {
-    display: block;
-    margin-top: 0.3rem;
-    font-size: 0.68rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--ink-soft);
-  }
   .delivery-input {
     width: 100%;
-    margin-top: 0.4rem;
-    padding: 0.6rem 0.7rem;
+    padding: 0.7rem 0.75rem;
     border: 2px solid var(--ink);
     border-radius: var(--radius);
-    background: var(--bg-2);
+    background: var(--surface);
     color: var(--ink);
     font-family: "Space Mono", ui-monospace, monospace;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
   }
   .delivery-input::placeholder { color: var(--ink-soft); }
 
   .ticket__total {
-    border-top: 2px solid var(--ink);
+    border-top: 3px solid var(--ink);
     padding: 1rem 1.25rem;
     display: flex;
     align-items: baseline;
@@ -774,7 +781,7 @@
           <h3>Agregar cheddar y bacon a las papas</h3>
           <span class="fries__price" id="fries-price">—</span>
         </div>
-        <p class="fries__note">Elegí a qué hamburguesa del pedido ponerle cheddar y bacon en las papas.</p>
+        <p class="fries__note">Cheddar derretido y bacon sobre las papas. Si pedís varias hamburguesas, elegís a cuáles.</p>
         <div class="fries__body">
           <div class="choice" role="radiogroup" aria-label="¿Agregar cheddar y bacon a las papas?">
             <label><input type="radio" name="fries-add" value="no" checked /><span>No</span></label>
@@ -789,7 +796,7 @@
           <h3>Agregar extra de carne</h3>
           <span class="fries__price" id="meat-price">—</span>
         </div>
-        <p class="fries__note">Elegí a qué hamburguesa del pedido sumarle medallones. Los que quieras.</p>
+        <p class="fries__note">Un medallón más de carne. Si pedís varias hamburguesas, elegís a cuáles y cuántos.</p>
         <div class="fries__body">
           <div class="choice" role="radiogroup" aria-label="¿Agregar extra de carne?">
             <label><input type="radio" name="meat-add" value="no" checked /><span>No</span></label>
@@ -811,27 +818,29 @@
           <p class="ticket__empty">Tu carrito está vacío. Sumá hamburguesas y aparecen acá.</p>
         </div>
 
-        <fieldset class="ticket__pay">
+        <fieldset class="ticket__sec">
           <legend>Entrega</legend>
-          <div class="pay-opts">
-            <label class="pay-opt"><input type="radio" name="entrega" value="retiro" checked /> Retiro</label>
-            <label class="pay-opt"><input type="radio" name="entrega" value="delivery" /> Delivery</label>
+          <div class="opt-pills">
+            <label class="opt-pill"><input type="radio" name="entrega" value="retiro" checked /> Retiro</label>
+            <label class="opt-pill"><input type="radio" name="entrega" value="delivery" /> Delivery</label>
           </div>
-          <p class="pay-note" id="entrega-note"></p>
-          <div id="delivery-box" hidden>
-            <label class="delivery-label" for="delivery-addr">Tu dirección (con número de casa)</label>
-            <input class="delivery-input" id="delivery-addr" type="text" autocomplete="street-address"
-                   placeholder="Ej: Belgrano 1234, timbre 2" />
-          </div>
+          <p class="opt-note" id="entrega-note"></p>
         </fieldset>
 
-        <fieldset class="ticket__pay">
+        <div class="ticket__sec" id="delivery-box" hidden>
+          <p class="ticket__sec-title">Tu dirección</p>
+          <label class="opt-note" for="delivery-addr">Calle y número de casa (y piso o timbre si hace falta).</label>
+          <input class="delivery-input" id="delivery-addr" type="text" autocomplete="street-address"
+                 placeholder="Ej: Belgrano 1234, timbre 2" />
+        </div>
+
+        <fieldset class="ticket__sec">
           <legend>Cómo pagás</legend>
-          <div class="pay-opts">
-            <label class="pay-opt"><input type="radio" name="pay" value="efectivo" checked /> Efectivo</label>
-            <label class="pay-opt"><input type="radio" name="pay" value="transferencia" /> Transferencia</label>
+          <div class="opt-pills">
+            <label class="opt-pill"><input type="radio" name="pay" value="efectivo" checked /> Efectivo</label>
+            <label class="opt-pill"><input type="radio" name="pay" value="transferencia" /> Transferencia</label>
           </div>
-          <p class="pay-note" id="pay-note">Pagás cuando te llega el pedido.</p>
+          <p class="opt-note" id="pay-note">Pagás cuando te llega el pedido.</p>
         </fieldset>
 
         <div class="ticket__total">
@@ -1026,6 +1035,15 @@
   const meatUnit = () => CONFIG.extraCarne.price;
   const burgerCount = () => CONFIG.burgers.reduce((s, b) => s + state.qty[b.id], 0);
 
+  // Cada unidad pedida del carrito: [{ b, i }] (b = hamburguesa, i = índice de esa unidad).
+  const cartUnits = () => {
+    const u = [];
+    CONFIG.burgers.forEach((b) => {
+      for (let i = 0; i < state.qty[b.id]; i++) u.push({ b, i });
+    });
+    return u;
+  };
+
   // Helpers que mantienen un valor por CADA unidad pedida de una hamburguesa.
   function unitArr(store, id, fill) {
     const q = state.qty[id];
@@ -1132,7 +1150,15 @@
   document.querySelectorAll('input[name="meat-add"]').forEach((r) => {
     r.addEventListener("change", () => {
       state.meatOn = r.value === "si";
-      if (!state.meatOn) state.extraCarne = {};
+      if (!state.meatOn) {
+        state.extraCarne = {};
+      } else {
+        const u = cartUnits();
+        if (u.length === 1) {
+          const a = meatArr(u[0].b.id);
+          if (a[u[0].i] === 0) a[u[0].i] = 1; // arranca en 1 medallón
+        }
+      }
       render();
     });
   });
@@ -1152,6 +1178,10 @@
   function unitName(b, arrLen, i) {
     return arrLen > 1 ? `${b.name} #${i + 1}` : b.name;
   }
+  // Etiqueta de una unidad dentro de un picker (usa la cantidad real de esa hamburguesa).
+  const unitLabelHTML = (b, i) =>
+    state.qty[b.id] > 1 ? `${b.name} <span class="meat-row__n">#${i + 1}</span>` : b.name;
+  const unitAria = (b, i) => (state.qty[b.id] > 1 ? `${b.name} unidad ${i + 1}` : b.name);
 
   function orderLines() {
     const lines = [];
@@ -1221,36 +1251,37 @@
       menuEl.querySelector(`[data-item="${b.id}"]`).classList.toggle("is-added", q > 0);
     });
 
-    // ---- Cheddar y bacon en las papas (por unidad) ----
+    const units = cartUnits();
+
+    // ---- Cheddar y bacon en las papas ----
     $("#fries-price").textContent = money(friesUnit()) + " c/u";
     document.querySelector('input[name="fries-add"][value="si"]').checked = state.friesOn;
     document.querySelector('input[name="fries-add"][value="no"]').checked = !state.friesOn;
     const fpicker = $("#fries-picker");
-    fpicker.hidden = !state.friesOn;
-    if (state.friesOn) {
-      const inCart = CONFIG.burgers.filter((b) => state.qty[b.id] > 0);
-      if (!inCart.length) {
-        fpicker.innerHTML = `<p class="meat-empty">Primero sumá hamburguesas arriba y elegí a cuáles ponerles cheddar y bacon.</p>`;
-      } else {
-        fpicker.innerHTML = inCart.map((b) => {
-          const a = cbArr(b.id);
-          return a.map((on, i) => {
-            const label = a.length > 1
-              ? `${b.name} <span class="meat-row__n">#${i + 1}</span>`
-              : b.name;
-            const nm = `cb-${b.id}-${i}`;
-            return `<div class="meat-row">
-              <span>${label}</span>
-              <div class="choice" role="radiogroup" aria-label="Cheddar y bacon en las papas de ${b.name} unidad ${i + 1}">
-                <label><input type="radio" name="${nm}" value="no" ${on ? "" : "checked"} /><span>No</span></label>
-                <label><input type="radio" name="${nm}" value="si" ${on ? "checked" : ""} /><span>Sí</span></label>
-              </div>
-            </div>`;
-          }).join("");
-        }).join("");
-      }
-    } else {
+    if (!state.friesOn) {
+      fpicker.hidden = true;
       fpicker.innerHTML = "";
+    } else if (units.length === 0) {
+      fpicker.hidden = false;
+      fpicker.innerHTML = `<p class="meat-empty">Primero sumá una hamburguesa.</p>`;
+    } else if (units.length === 1) {
+      // Una sola unidad: "Sí" ya aplica a esa hamburguesa, no hace falta elegir.
+      state.cheddarBacon = { [units[0].b.id]: [true] };
+      fpicker.hidden = true;
+      fpicker.innerHTML = "";
+    } else {
+      fpicker.hidden = false;
+      fpicker.innerHTML = units.map(({ b, i }) => {
+        const on = !!cbArr(b.id)[i];
+        const nm = `cb-${b.id}-${i}`;
+        return `<div class="meat-row">
+          <span>${unitLabelHTML(b, i)}</span>
+          <div class="choice" role="radiogroup" aria-label="Cheddar y bacon en las papas de ${unitAria(b, i)}">
+            <label><input type="radio" name="${nm}" value="no" ${on ? "" : "checked"} /><span>No</span></label>
+            <label><input type="radio" name="${nm}" value="si" ${on ? "checked" : ""} /><span>Sí</span></label>
+          </div>
+        </div>`;
+      }).join("");
     }
 
     // ---- Extra carne ----
@@ -1258,31 +1289,38 @@
     document.querySelector('input[name="meat-add"][value="si"]').checked = state.meatOn;
     document.querySelector('input[name="meat-add"][value="no"]').checked = !state.meatOn;
     const picker = $("#meat-picker");
-    picker.hidden = !state.meatOn;
-    if (state.meatOn) {
-      const inCart = CONFIG.burgers.filter((b) => state.qty[b.id] > 0);
-      if (!inCart.length) {
-        picker.innerHTML = `<p class="meat-empty">Primero sumá hamburguesas arriba y elegí a cuáles agregarles carne.</p>`;
-      } else {
-        picker.innerHTML = inCart.map((b) => {
-          const a = meatArr(b.id);
-          return a.map((n, i) => {
-            const label = a.length > 1
-              ? `${b.name} <span class="meat-row__n">#${i + 1}</span>`
-              : b.name;
-            return `<div class="meat-row">
-              <span>${label}</span>
-              <div class="stepper" data-active="${n > 0}">
-                <button type="button" data-meat-step="-1" data-meat-for="${b.id}" data-meat-idx="${i}" aria-label="Quitar medallón extra en ${b.name} unidad ${i + 1}" ${n === 0 ? "disabled" : ""}>−</button>
-                <output aria-live="polite">${n}</output>
-                <button type="button" data-meat-step="1" data-meat-for="${b.id}" data-meat-idx="${i}" aria-label="Agregar medallón extra en ${b.name} unidad ${i + 1}">+</button>
-              </div>
-            </div>`;
-          }).join("");
-        }).join("");
-      }
-    } else {
+    if (!state.meatOn) {
+      picker.hidden = true;
       picker.innerHTML = "";
+    } else if (units.length === 0) {
+      picker.hidden = false;
+      picker.innerHTML = `<p class="meat-empty">Primero sumá una hamburguesa.</p>`;
+    } else if (units.length === 1) {
+      // Una sola unidad: stepper directo, no hace falta elegir cuál.
+      const { b, i } = units[0];
+      const n = meatArr(b.id)[i];
+      picker.hidden = false;
+      picker.innerHTML = `<div class="meat-row">
+        <span>Medallones extra</span>
+        <div class="stepper" data-active="${n > 0}">
+          <button type="button" data-meat-step="-1" data-meat-for="${b.id}" data-meat-idx="${i}" aria-label="Quitar medallón extra" ${n === 0 ? "disabled" : ""}>−</button>
+          <output aria-live="polite">${n}</output>
+          <button type="button" data-meat-step="1" data-meat-for="${b.id}" data-meat-idx="${i}" aria-label="Agregar medallón extra">+</button>
+        </div>
+      </div>`;
+    } else {
+      picker.hidden = false;
+      picker.innerHTML = units.map(({ b, i }) => {
+        const n = meatArr(b.id)[i];
+        return `<div class="meat-row">
+          <span>${unitLabelHTML(b, i)}</span>
+          <div class="stepper" data-active="${n > 0}">
+            <button type="button" data-meat-step="-1" data-meat-for="${b.id}" data-meat-idx="${i}" aria-label="Quitar medallón extra en ${unitAria(b, i)}" ${n === 0 ? "disabled" : ""}>−</button>
+            <output aria-live="polite">${n}</output>
+            <button type="button" data-meat-step="1" data-meat-for="${b.id}" data-meat-idx="${i}" aria-label="Agregar medallón extra en ${unitAria(b, i)}">+</button>
+          </div>
+        </div>`;
+      }).join("");
     }
 
     const rows = [];
