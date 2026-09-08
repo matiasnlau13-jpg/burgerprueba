@@ -592,7 +592,7 @@
   .opt-note { font-size: 0.8rem; color: var(--ink-soft); min-height: 1.1em; margin: 0; }
   .opt-note b { color: var(--ink); }
 
-  .delivery-input {
+  .tk-input {
     width: 100%;
     padding: 0.8rem 0.8rem;
     border: 2px solid var(--ink);
@@ -602,7 +602,7 @@
     font-family: "Space Mono", ui-monospace, monospace;
     font-size: 0.95rem;
   }
-  .delivery-input::placeholder { color: var(--ink-soft); }
+  .tk-input::placeholder { color: var(--ink-soft); }
 
   .ticket__total {
     display: flex;
@@ -817,6 +817,8 @@
 
         <fieldset class="tk-card">
           <legend class="tk-title">Entrega</legend>
+          <label class="opt-note" for="cust-name">Tu nombre</label>
+          <input class="tk-input" id="cust-name" type="text" autocomplete="name" placeholder="Ej: Martín" />
           <div class="opt-pills">
             <label class="opt-pill"><input type="radio" name="entrega" value="retiro" checked /> Retiro</label>
             <label class="opt-pill"><input type="radio" name="entrega" value="delivery" /> Delivery</label>
@@ -827,7 +829,7 @@
         <section class="tk-card tk-card--accent" id="delivery-box" hidden>
           <h3 class="tk-title">Tu dirección</h3>
           <label class="opt-note" for="delivery-addr">Calle y número de casa (y piso o timbre si hace falta).</label>
-          <input class="delivery-input" id="delivery-addr" type="text" autocomplete="street-address"
+          <input class="tk-input" id="delivery-addr" type="text" autocomplete="street-address"
                  placeholder="Ej: Belgrano 1234, timbre 2" />
         </section>
 
@@ -960,6 +962,7 @@
     cheddarBacon: {},
     extraCarne: {},
     meatOn: false,
+    nombre: "",
     entrega: "retiro",
     direccion: "",
     pay: "efectivo",
@@ -970,6 +973,7 @@
     if (saved && saved.qty) {
       CONFIG.burgers.forEach((b) => { if (Number.isFinite(saved.qty[b.id])) state.qty[b.id] = saved.qty[b.id]; });
       if (["efectivo", "transferencia"].includes(saved.pay)) state.pay = saved.pay;
+      if (typeof saved.nombre === "string") state.nombre = saved.nombre.slice(0, 80);
       if (["retiro", "delivery"].includes(saved.entrega)) state.entrega = saved.entrega;
       if (typeof saved.direccion === "string") state.direccion = saved.direccion.slice(0, 200);
       if (saved.cheddarBacon && typeof saved.cheddarBacon === "object") {
@@ -1166,6 +1170,10 @@
   document.querySelectorAll('input[name="entrega"]').forEach((r) => {
     r.addEventListener("change", () => { state.entrega = r.value; render(); });
   });
+  $("#cust-name").addEventListener("input", (e) => {
+    state.nombre = e.target.value;
+    render();
+  });
   $("#delivery-addr").addEventListener("input", (e) => {
     state.direccion = e.target.value;
     render();
@@ -1216,19 +1224,15 @@
   function waLink() {
     const items = orderLines();
     if (!items.length || !deliveryReady()) return null;
-    const entregaLines =
-      state.entrega === "delivery"
-        ? ["Entrega: delivery", `Dirección: ${state.direccion.trim()}`]
-        : ["Entrega: retiro en el local"];
-    const msg = [
-      "Hola, quiero hacer un pedido:",
-      "",
-      ...items,
-      "",
-      ...entregaLines,
-      `Pago: ${state.pay}`,
-      `Total según la web: ${money(total())}`,
-    ].join("\n");
+    const meta = [];
+    if (state.nombre.trim()) meta.push(`Nombre: ${state.nombre.trim()}`);
+    if (state.entrega === "delivery") {
+      meta.push("Entrega: delivery", `Dirección: ${state.direccion.trim()}`);
+    } else {
+      meta.push("Entrega: retiro en el local");
+    }
+    meta.push(`Pago: ${state.pay}`, `Total según la web: ${money(total())}`);
+    const msg = ["Hola, quiero hacer un pedido:", "", ...items, "", ...meta].join("\n");
     return `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`;
   }
 
@@ -1395,6 +1399,7 @@
   });
 
   document.querySelector(`input[name="pay"][value="${state.pay}"]`).checked = true;
+  $("#cust-name").value = state.nombre;
   $("#delivery-addr").value = state.direccion;
   $("#foot-wa").href = `https://wa.me/${CONFIG.whatsapp}`;
 
