@@ -358,6 +358,28 @@
     border-bottom: 1px solid var(--accent);
     padding-bottom: 0.1rem;
   }
+  .item__photobtn {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.6rem;
+    padding: 0.3rem 0.55rem 0.3rem 0.4rem;
+    border: 1.5px solid var(--accent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+    color: var(--accent);
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.14s ease;
+  }
+  .item__photobtn svg { width: 15px; height: 15px; }
+  .item__photobtn::after { content: "Toque para ver la foto"; }
+  .item.show-photo .item__photobtn::after { content: "Ocultar la foto"; }
+  .item__photobtn:hover { background: color-mix(in srgb, var(--accent) 20%, transparent); }
   .item__price {
     grid-column: 2;
     grid-row: 1;
@@ -814,7 +836,7 @@
       <div class="section-head">
         <p class="kicker">La carta</p>
         <h2 id="menu-title">Hamburguesas</h2>
-        <p>Todas vienen con papas. Al sumar una elegís si la querés simple, doble o triple. Tocá una para ver la foto.</p>
+        <p>Todas vienen con papas. Al sumar una elegís si la querés simple, doble o triple.</p>
       </div>
 
       <div class="menu" id="menu"></div>
@@ -1042,7 +1064,12 @@
   menuEl.innerHTML = CONFIG.burgers.map((b) => `
     <article class="item" data-item="${b.id}">
       <h3 class="item__name">${b.name}${b.tag ? `<span class="item__tag">${b.tag}</span>` : ""}</h3>
-      <div class="item__desc">${b.desc}<br /><span class="item__incl">Incluye papas</span></div>
+      <div class="item__desc">
+        ${b.desc}<br /><span class="item__incl">Incluye papas</span>
+        <button class="item__photobtn" type="button" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 8a2 2 0 0 1 2-2h1l1-1.5A1 1 0 0 1 10 4h4a1 1 0 0 1 1 .5L16 6h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12.5" r="3" stroke="currentColor" stroke-width="2"/></svg>
+        </button>
+      </div>
       <p class="item__price">${money(b.price)}</p>
       <div class="item__control">
         <div class="stepper" data-stepper="${b.id}">
@@ -1149,12 +1176,18 @@
       setMed(med.dataset.medFor, Number(med.dataset.medIdx), Number(med.dataset.med));
       return;
     }
-    // Tocar (o clickear) la fila muestra u oculta la foto.
+    // Tocar la fila (o el botón "Toque para ver la foto") muestra u oculta la foto.
     const item = e.target.closest(".item");
     if (!item) return;
     const wasOpen = item.classList.contains("show-photo");
-    menuEl.querySelectorAll(".item.show-photo").forEach((el) => el.classList.remove("show-photo"));
-    if (!wasOpen) item.classList.add("show-photo");
+    menuEl.querySelectorAll(".item.show-photo").forEach((el) => {
+      el.classList.remove("show-photo");
+      el.querySelector(".item__photobtn")?.setAttribute("aria-expanded", "false");
+    });
+    if (!wasOpen) {
+      item.classList.add("show-photo");
+      item.querySelector(".item__photobtn")?.setAttribute("aria-expanded", "true");
+    }
   });
 
   $("#fries-picker").addEventListener("change", (e) => {
