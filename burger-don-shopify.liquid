@@ -1,7 +1,7 @@
 {%- comment -%}
   burgerprueba · sección para Shopify
   Pegá TODO este archivo en una sección "Custom Liquid" (Liquid personalizado)
-  desde el editor de temas. Editá el menú/WhatsApp en el bloque CONFIG (abajo del todo).
+  desde el editor de temas. Editá el menú/WhatsApp/dirección en el bloque CONFIG (abajo del todo).
 {%- endcomment -%}
 
 <style>
@@ -579,6 +579,27 @@
   .pay-note { font-size: 0.78rem; color: var(--ink-soft); min-height: 1.1em; }
   .pay-note b { color: var(--ink); }
 
+  .delivery-label {
+    display: block;
+    margin-top: 0.3rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .delivery-input {
+    width: 100%;
+    margin-top: 0.4rem;
+    padding: 0.6rem 0.7rem;
+    border: 2px solid var(--ink);
+    border-radius: var(--radius);
+    background: var(--bg-2);
+    color: var(--ink);
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 0.85rem;
+  }
+  .delivery-input::placeholder { color: var(--ink-soft); }
+
   .ticket__total {
     border-top: 2px solid var(--ink);
     padding: 1rem 1.25rem;
@@ -791,6 +812,20 @@
         </div>
 
         <fieldset class="ticket__pay">
+          <legend>Entrega</legend>
+          <div class="pay-opts">
+            <label class="pay-opt"><input type="radio" name="entrega" value="retiro" checked /> Retiro</label>
+            <label class="pay-opt"><input type="radio" name="entrega" value="delivery" /> Delivery</label>
+          </div>
+          <p class="pay-note" id="entrega-note"></p>
+          <div id="delivery-box" hidden>
+            <label class="delivery-label" for="delivery-addr">Tu dirección (con número de casa)</label>
+            <input class="delivery-input" id="delivery-addr" type="text" autocomplete="street-address"
+                   placeholder="Ej: Belgrano 1234, timbre 2" />
+          </div>
+        </fieldset>
+
+        <fieldset class="ticket__pay">
           <legend>Cómo pagás</legend>
           <div class="pay-opts">
             <label class="pay-opt"><input type="radio" name="pay" value="efectivo" checked /> Efectivo</label>
@@ -825,7 +860,6 @@
   <div class="wrap foot__grid">
     <div>
       <p class="foot__brand">burgerprueba</p>
-      <p style="color:var(--ink-soft);margin-top:0.4rem;">Est 2020</p>
     </div>
     <div>
       <h3>Dónde</h3>
@@ -858,14 +892,17 @@
     // WhatsApp con código de país, sin + ni espacios. Ej Argentina: 549 + área + número.
     whatsapp: "5491124564499",
 
+    // Dirección del local (se muestra cuando el cliente elige "Retiro en el local").
+    direccionLocal: "(poné acá la dirección del local)",
+
     // Las 5 hamburguesas. Todas incluyen papas (se aclara solo en la web).
     // "photo": pegá acá el data URI de la foto de cada una (te lo armo yo con las fotos reales).
     //          Si queda "" se usa una ilustración de ejemplo.
     burgers: [
       { id: "clasica", name: "La Clásica",  tag: "",              price: 7200, photo: "", desc: "Medallón smash, cheddar, cebolla, pepino y salsa de la casa en pan de papa." },
-      { id: "doble",   name: "Doble Don",   tag: "La más pedida", price: 9800, photo: "", desc: "Doble medallón, doble cheddar, panceta crocante y cebolla caramelizada." },
+      { id: "doble",   name: "La Doble",    tag: "La más pedida", price: 9800, photo: "", desc: "Doble medallón, doble cheddar, panceta crocante y cebolla caramelizada." },
       { id: "criolla", name: "La Criolla",  tag: "",              price: 8600, photo: "", desc: "Medallón, cheddar, huevo frito, jamón, lechuga y tomate." },
-      { id: "azul",    name: "Doña Azul",   tag: "",              price: 9200, photo: "", desc: "Medallón, queso azul, rúcula y cebolla morada al verdeo." },
+      { id: "azul",    name: "La Roquefort", tag: "",             price: 9200, photo: "", desc: "Medallón, roquefort, rúcula y cebolla morada al verdeo." },
       { id: "brava",   name: "La Brava",    tag: "Picante",       price: 8400, photo: "", desc: "Medallón, cheddar, jalapeños, cebolla crispy y salsa chipotle." },
     ],
 
@@ -918,14 +955,18 @@
     cheddarBacon: {},
     extraCarne: {},
     meatOn: false,
+    entrega: "retiro",
+    direccion: "",
     pay: "efectivo",
   };
 
   try {
-    const saved = JSON.parse(localStorage.getItem("burgerdon.order.v4") || "null");
+    const saved = JSON.parse(localStorage.getItem("burgerdon.order.v5") || "null");
     if (saved && saved.qty) {
       CONFIG.burgers.forEach((b) => { if (Number.isFinite(saved.qty[b.id])) state.qty[b.id] = saved.qty[b.id]; });
       if (["efectivo", "transferencia"].includes(saved.pay)) state.pay = saved.pay;
+      if (["retiro", "delivery"].includes(saved.entrega)) state.entrega = saved.entrega;
+      if (typeof saved.direccion === "string") state.direccion = saved.direccion.slice(0, 200);
       if (saved.cheddarBacon && typeof saved.cheddarBacon === "object") {
         CONFIG.burgers.forEach((b) => {
           const arr = saved.cheddarBacon[b.id];
@@ -951,7 +992,7 @@
     }
   } catch (e) {}
 
-  const persist = () => { try { localStorage.setItem("burgerdon.order.v4", JSON.stringify(state)); } catch (e) {} };
+  const persist = () => { try { localStorage.setItem("burgerdon.order.v5", JSON.stringify(state)); } catch (e) {} };
 
   /* ---- Nav sólido al hacer scroll ---- */
   const nav = $("#nav");
@@ -1100,6 +1141,14 @@
     r.addEventListener("change", () => { state.pay = r.value; render(); });
   });
 
+  document.querySelectorAll('input[name="entrega"]').forEach((r) => {
+    r.addEventListener("change", () => { state.entrega = r.value; render(); });
+  });
+  $("#delivery-addr").addEventListener("input", (e) => {
+    state.direccion = e.target.value;
+    render();
+  });
+
   function unitName(b, arrLen, i) {
     return arrLen > 1 ? `${b.name} #${i + 1}` : b.name;
   }
@@ -1136,14 +1185,21 @@
     return lines;
   }
 
+  const deliveryReady = () => state.entrega !== "delivery" || state.direccion.trim().length > 0;
+
   function waLink() {
     const items = orderLines();
-    if (!items.length) return null;
+    if (!items.length || !deliveryReady()) return null;
+    const entregaLines =
+      state.entrega === "delivery"
+        ? ["Entrega: delivery", `Dirección: ${state.direccion.trim()}`]
+        : ["Entrega: retiro en el local"];
     const msg = [
       "Hola, quiero hacer un pedido:",
       "",
       ...items,
       "",
+      ...entregaLines,
       `Pago: ${state.pay}`,
       `Total según la web: ${money(total())}`,
     ].join("\n");
@@ -1258,6 +1314,14 @@
     }
     flashId = null;
 
+    // ---- Entrega ----
+    document.querySelector('input[name="entrega"][value="retiro"]').checked = state.entrega === "retiro";
+    document.querySelector('input[name="entrega"][value="delivery"]').checked = state.entrega === "delivery";
+    $("#delivery-box").hidden = state.entrega !== "delivery";
+    $("#entrega-note").textContent = state.entrega === "delivery"
+      ? "Te lo llevamos. Escribí tu dirección con el número de casa."
+      : "Retirás en: " + CONFIG.direccionLocal;
+
     $("#pay-note").textContent = state.pay === "transferencia"
       ? "Te pasamos el alias por WhatsApp cuando confirmes el pedido."
       : "Pagás cuando te llega el pedido.";
@@ -1275,7 +1339,9 @@
     } else {
       wa.href = "#"; wa.setAttribute("aria-disabled", "true"); wa.removeAttribute("target");
       barWa.href = "#";
-      $("#wa-hint").textContent = "Sumá al menos una hamburguesa";
+      $("#wa-hint").textContent = burgerCount() === 0
+        ? "Sumá al menos una hamburguesa"
+        : "Escribí tu dirección para el delivery";
     }
 
     const bar = $("#mobile-bar");
@@ -1295,6 +1361,7 @@
   });
 
   document.querySelector(`input[name="pay"][value="${state.pay}"]`).checked = true;
+  $("#delivery-addr").value = state.direccion;
   $("#foot-wa").href = `https://wa.me/${CONFIG.whatsapp}`;
 
   render();
