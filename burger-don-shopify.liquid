@@ -1,7 +1,7 @@
 {%- comment -%}
   burgerprueba · sección para Shopify
-  Pegá TODO este archivo en una sección "Custom Liquid" (Liquid personalizado)
-  desde el editor de temas. Editá menú / WhatsApp / dirección en el bloque CONFIG (abajo del todo).
+  Pegá TODO este archivo en una sección "Custom Liquid" del editor de temas.
+  Editá menú / WhatsApp / dirección en el bloque CONFIG (al final).
 {%- endcomment -%}
 
 <style>
@@ -499,22 +499,39 @@
   @media (min-width: 940px) { .ticket-col { position: sticky; top: calc(var(--nav-h) + 1rem); } }
 
   .ticket {
+    display: grid;
+    gap: 0.85rem;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+
+  .tk-card {
     background: var(--surface);
     border: 2px solid var(--ink);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
+    border-radius: 8px;
+    box-shadow: 0 10px 24px -16px rgba(0, 0, 0, 0.55);
+    padding: 1.15rem 1.2rem;
+    display: grid;
+    gap: 0.8rem;
+    margin: 0;
+    min-inline-size: 0;
+  }
+  .tk-card--accent { background: color-mix(in srgb, var(--accent) 9%, var(--surface)); }
+  .tk-card--total { gap: 1rem; }
+
+  .tk-card__head { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+  .tk-title {
     font-family: "Space Mono", ui-monospace, monospace;
-    font-size: var(--fs-ticket);
-    line-height: 1.5;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin: 0;
+    padding: 0;
   }
-  .ticket__head {
-    padding: 1.1rem 1.25rem 0.9rem;
-    border-bottom: 2px dashed var(--line-strong);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .ticket__head h2 { font-family: "Space Mono", monospace; font-weight: 700; font-size: 1rem; letter-spacing: 0.14em; }
+
   .ticket__stamp {
     font-size: 0.66rem;
     letter-spacing: 0.14em;
@@ -534,57 +551,38 @@
     100% { transform: rotate(4deg) scale(1); }
   }
 
-  .ticket__body { padding: 1rem 1.25rem; }
-  .ticket__empty { color: var(--ink-soft); padding: 0.5rem 0 0.75rem; }
+  .ticket__body { display: grid; gap: 0.15rem; }
+  .ticket__empty { color: var(--ink-soft); margin: 0; padding: 0.25rem 0; }
 
   .line {
     display: grid;
-    grid-template-columns: 1.6ch 1fr auto;
+    grid-template-columns: 1.8ch 1fr auto;
     gap: 0.5rem;
-    padding: 0.32rem 0;
+    padding: 0.34rem 0;
     font-variant-numeric: tabular-nums;
   }
   .line--sub {
     grid-template-columns: 1fr auto;
     border-top: 2px dashed var(--line-strong);
-    margin-top: 0.5rem;
-    padding-top: 0.6rem;
-    color: var(--ink-soft);
+    margin-top: 0.55rem;
+    padding-top: 0.7rem;
+    font-weight: 700;
+    color: var(--ink);
   }
   .line--flash { background: color-mix(in srgb, var(--accent) 16%, transparent); }
   .line__qty { color: var(--accent); font-weight: 700; }
 
-  .ticket__sec {
-    border-top: 3px solid var(--line-strong);
-    padding: 1.1rem 1.25rem;
-    display: grid;
-    gap: 0.7rem;
-    border-inline: 0;
-    border-bottom: 0;
-    margin: 0;
-    min-inline-size: 0;
-  }
-  .ticket__sec legend,
-  .ticket__sec-title {
-    font-family: "Space Mono", ui-monospace, monospace;
-    font-size: 0.82rem;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--ink);
-    padding: 0;
-    margin: 0;
-  }
-  #delivery-box { background: color-mix(in srgb, var(--accent) 8%, transparent); }
-
-  .opt-pills { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+  .opt-pills { display: grid; grid-template-columns: 1fr 1fr; gap: 0.55rem; }
   .opt-pill {
     border: 2px solid var(--ink);
-    border-radius: var(--radius);
-    padding: 0.6rem 0.6rem;
+    border-radius: 6px;
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     cursor: pointer;
-    font-size: 0.88rem;
+    font-size: 0.92rem;
     font-weight: 600;
     background: var(--bg-2);
     transition: background 0.14s ease, color 0.14s ease;
@@ -592,37 +590,35 @@
   .opt-pill:has(input:checked) { background: var(--ink); color: var(--bg); }
   .opt-pill:has(input:focus-visible) { outline: 3px solid var(--accent); outline-offset: 2px; }
   .opt-pill input { position: absolute; opacity: 0; }
-  .opt-note { font-size: 0.78rem; color: var(--ink-soft); min-height: 1.1em; margin: 0; }
+  .opt-note { font-size: 0.8rem; color: var(--ink-soft); min-height: 1.1em; margin: 0; }
   .opt-note b { color: var(--ink); }
 
   .delivery-input {
     width: 100%;
-    padding: 0.7rem 0.75rem;
+    padding: 0.8rem 0.8rem;
     border: 2px solid var(--ink);
-    border-radius: var(--radius);
+    border-radius: 6px;
     background: var(--surface);
     color: var(--ink);
     font-family: "Space Mono", ui-monospace, monospace;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
   }
   .delivery-input::placeholder { color: var(--ink-soft); }
 
   .ticket__total {
-    border-top: 3px solid var(--ink);
-    padding: 1rem 1.25rem;
     display: flex;
     align-items: baseline;
     justify-content: space-between;
+    gap: 0.5rem;
   }
-  .ticket__total span { font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); }
+  .ticket__total span { font-size: 0.8rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); }
   .ticket__total b {
     font-family: "Alfa Slab One", serif;
     font-weight: 400;
-    font-size: 1.7rem;
+    font-size: 1.9rem;
     font-variant-numeric: tabular-nums;
   }
 
-  .ticket__foot { padding: 0 1.25rem 1.25rem; }
   .wa-btn {
     width: 100%;
     display: inline-flex;
@@ -632,9 +628,9 @@
     font-family: "Archivo", sans-serif;
     font-weight: 700;
     font-size: 1rem;
-    padding: 0.95rem 1rem;
+    padding: 1rem 1rem;
     border: 2px solid var(--ink);
-    border-radius: var(--radius);
+    border-radius: 6px;
     background: var(--accent);
     color: var(--accent-ink);
     text-decoration: none;
@@ -650,7 +646,7 @@
     cursor: not-allowed;
     transform: none;
   }
-  .wa-hint { margin: 0.55rem 0 0; font-family: "Space Mono", monospace; font-size: 0.72rem; color: var(--ink-soft); text-align: center; }
+  .wa-hint { margin: 0; font-family: "Space Mono", monospace; font-size: 0.74rem; color: var(--ink-soft); text-align: center; }
 
   /* ---- Barra mobile ---- */
 
@@ -809,17 +805,19 @@
 
     <aside class="ticket-col">
       <div class="ticket" id="comanda" aria-label="Tu carrito">
-        <div class="ticket__head">
-          <h2>Carrito</h2>
-          <span class="ticket__stamp" id="stamp">burgerprueba</span>
-        </div>
 
-        <div class="ticket__body" id="ticket-lines" aria-live="polite">
-          <p class="ticket__empty">Tu carrito está vacío. Sumá hamburguesas y aparecen acá.</p>
-        </div>
+        <section class="tk-card">
+          <div class="tk-card__head">
+            <h2 class="tk-title">Tu pedido</h2>
+            <span class="ticket__stamp" id="stamp">burgerprueba</span>
+          </div>
+          <div class="ticket__body" id="ticket-lines" aria-live="polite">
+            <p class="ticket__empty">Todavía no elegiste nada. Sumá hamburguesas arriba.</p>
+          </div>
+        </section>
 
-        <fieldset class="ticket__sec">
-          <legend>Entrega</legend>
+        <fieldset class="tk-card">
+          <legend class="tk-title">Entrega</legend>
           <div class="opt-pills">
             <label class="opt-pill"><input type="radio" name="entrega" value="retiro" checked /> Retiro</label>
             <label class="opt-pill"><input type="radio" name="entrega" value="delivery" /> Delivery</label>
@@ -827,15 +825,15 @@
           <p class="opt-note" id="entrega-note"></p>
         </fieldset>
 
-        <div class="ticket__sec" id="delivery-box" hidden>
-          <p class="ticket__sec-title">Tu dirección</p>
+        <section class="tk-card tk-card--accent" id="delivery-box" hidden>
+          <h3 class="tk-title">Tu dirección</h3>
           <label class="opt-note" for="delivery-addr">Calle y número de casa (y piso o timbre si hace falta).</label>
           <input class="delivery-input" id="delivery-addr" type="text" autocomplete="street-address"
                  placeholder="Ej: Belgrano 1234, timbre 2" />
-        </div>
+        </section>
 
-        <fieldset class="ticket__sec">
-          <legend>Cómo pagás</legend>
+        <fieldset class="tk-card">
+          <legend class="tk-title">Cómo pagás</legend>
           <div class="opt-pills">
             <label class="opt-pill"><input type="radio" name="pay" value="efectivo" checked /> Efectivo</label>
             <label class="opt-pill"><input type="radio" name="pay" value="transferencia" /> Transferencia</label>
@@ -843,18 +841,17 @@
           <p class="opt-note" id="pay-note">Pagás cuando te llega el pedido.</p>
         </fieldset>
 
-        <div class="ticket__total">
-          <span>Total</span>
-          <b id="total">$0</b>
-        </div>
-
-        <div class="ticket__foot">
+        <section class="tk-card tk-card--total">
+          <div class="ticket__total">
+            <span>Total</span>
+            <b id="total">$0</b>
+          </div>
           <a class="wa-btn" id="wa" href="#" aria-disabled="true" role="button">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 2.1.55 4.05 1.6 5.79L2 22l4.42-1.7a9.9 9.9 0 0 0 5.62 1.73h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Zm0 18.13a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-2.62 1 .7-2.55-.2-.32a8.16 8.16 0 0 1-1.26-4.35c0-4.53 3.69-8.22 8.22-8.22 2.2 0 4.26.86 5.81 2.41a8.15 8.15 0 0 1 2.4 5.82c0 4.53-3.68 8.22-8.21 8.22Zm4.5-6.15c-.25-.12-1.46-.72-1.68-.8-.23-.09-.39-.12-.56.12-.16.25-.64.8-.78.97-.15.16-.29.18-.53.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.23-1.46-1.37-1.7-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.12-.15.16-.25.25-.42.08-.16.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.42-.14 0-.31-.02-.47-.02-.16 0-.43.06-.65.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.16 1.74 2.66 4.22 3.73.59.25 1.05.4 1.4.52.59.19 1.13.16 1.55.1.47-.07 1.46-.6 1.66-1.17.21-.58.21-1.07.14-1.17-.06-.11-.22-.17-.47-.29Z"/></svg>
             Enviar pedido por WhatsApp
           </a>
           <p class="wa-hint" id="wa-hint">Sumá al menos una hamburguesa</p>
-        </div>
+        </section>
       </div>
     </aside>
   </div>
@@ -1344,7 +1341,7 @@
 
     const linesEl = $("#ticket-lines");
     if (!rows.length) {
-      linesEl.innerHTML = `<p class="ticket__empty">Tu carrito está vacío. Sumá hamburguesas y aparecen acá.</p>`;
+      linesEl.innerHTML = `<p class="ticket__empty">Todavía no elegiste nada. Sumá hamburguesas arriba.</p>`;
     } else {
       const count = burgerCount();
       linesEl.innerHTML = rows.join("") +
@@ -1419,14 +1416,6 @@
 
 {% schema %}
 
-{
-
-  "name": "burgerprueba",
-
-  "settings": [],
-
-  "presets": [{ "name": "burgerprueba" }]
-
-}
+{ "name": "burgerprueba", "settings": [], "presets": [{ "name": "burgerprueba" }] }
 
 {% endschema %}
