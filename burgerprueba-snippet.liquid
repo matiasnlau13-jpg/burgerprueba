@@ -13,18 +13,18 @@
      ============================================================ */
 
   :root {
-    /* ---- Papel (tema claro) ---- */
-    --bg: #E7DECB;
-    --bg-2: #F1EADA;
-    --surface: #F4EEDF;
-    --ink: #1A1714;
-    --ink-soft: #574C3C;
-    --accent: #C0201A;
-    --accent-ink: #F7F1E4;
-    --sun: #A87B12;
-    --line: rgba(26, 23, 20, 0.32);
-    --line-strong: rgba(26, 23, 20, 0.6);
-    --shadow: 0 22px 50px -28px rgba(26, 23, 20, 0.55);
+    /* ---- Ember Grill · tema claro (crema tostada) ---- */
+    --bg: #F2E7D4;
+    --bg-2: #ECDFC8;
+    --surface: #F7EDDB;
+    --ink: #1C1512;
+    --ink-soft: #6B5A4A;
+    --accent: #C93A12;
+    --accent-ink: #FBF3E6;
+    --sun: #A9741A;
+    --line: rgba(28, 21, 18, 0.30);
+    --line-strong: rgba(28, 21, 18, 0.58);
+    --shadow: 0 22px 50px -28px rgba(28, 21, 18, 0.5);
 
     --fs-h2: clamp(1.85rem, 4.2vw, 2.9rem);
     --fs-h3: 1.2rem;
@@ -41,33 +41,33 @@
 
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --bg: #0B0A09;
-      --bg-2: #12100E;
-      --surface: #16130F;
-      --ink: #F3ECDD;
-      --ink-soft: #A99C84;
-      --accent: #E9381F;
-      --accent-ink: #14100D;
-      --sun: #E7C86B;
-      --line: rgba(243, 236, 221, 0.16);
-      --line-strong: rgba(243, 236, 221, 0.4);
-      --shadow: 0 30px 70px -30px rgba(0, 0, 0, 0.8);
+      --bg: #100C0A;
+      --bg-2: #16110D;
+      --surface: #1C1512;
+      --ink: #F3E9D6;
+      --ink-soft: #A79781;
+      --accent: #EA4C1B;
+      --accent-ink: #140F0C;
+      --sun: #E8B04B;
+      --line: rgba(243, 233, 214, 0.15);
+      --line-strong: rgba(243, 233, 214, 0.4);
+      --shadow: 0 30px 70px -30px rgba(0, 0, 0, 0.85);
       color-scheme: dark;
     }
   }
 
   :root[data-theme="dark"] {
-    --bg: #0B0A09;
-    --bg-2: #12100E;
-    --surface: #16130F;
-    --ink: #F3ECDD;
-    --ink-soft: #A99C84;
-    --accent: #E9381F;
-    --accent-ink: #14100D;
-    --sun: #E7C86B;
-    --line: rgba(243, 236, 221, 0.16);
-    --line-strong: rgba(243, 236, 221, 0.4);
-    --shadow: 0 30px 70px -30px rgba(0, 0, 0, 0.8);
+    --bg: #100C0A;
+    --bg-2: #16110D;
+    --surface: #1C1512;
+    --ink: #F3E9D6;
+    --ink-soft: #A79781;
+    --accent: #EA4C1B;
+    --accent-ink: #140F0C;
+    --sun: #E8B04B;
+    --line: rgba(243, 233, 214, 0.15);
+    --line-strong: rgba(243, 233, 214, 0.4);
+    --shadow: 0 30px 70px -30px rgba(0, 0, 0, 0.85);
     color-scheme: dark;
   }
 
@@ -127,7 +127,7 @@
     justify-content: space-between;
     gap: 1rem;
     padding-inline: clamp(1.1rem, 4vw, 2.5rem);
-    color: #F4EDDE;
+    color: #F3E9D6;
     transition: background 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
   }
   .nav.solid {
@@ -146,10 +146,10 @@
   /* ===================== HERO ===================== */
 
   .hero {
-    --h-bg: #0A0908;
-    --h-ink: #F4EDDE;
-    --h-sun: #EBCB6E;
-    --h-accent: #EC3B22;
+    --h-bg: #14100E;
+    --h-ink: #F3E9D6;
+    --h-sun: #E8B04B;
+    --h-accent: #EA4C1B;
 
     position: relative;
     min-height: 100svh;
@@ -184,8 +184,8 @@
     inset: 0;
     pointer-events: none;
     background:
-      radial-gradient(58% 44% at 50% 108%, rgba(236, 59, 34, 0.30), rgba(236, 59, 34, 0) 72%),
-      radial-gradient(70% 55% at 50% 34%, rgba(235, 203, 110, 0.10), rgba(235, 203, 110, 0) 70%),
+      radial-gradient(58% 44% at 50% 108%, rgba(234, 76, 27, 0.32), rgba(234, 76, 27, 0) 72%),
+      radial-gradient(70% 55% at 50% 34%, rgba(232, 176, 75, 0.12), rgba(232, 176, 75, 0) 70%),
       linear-gradient(180deg, rgba(0, 0, 0, 0.66) 0%, rgba(0, 0, 0, 0) 26%, rgba(0, 0, 0, 0) 58%, rgba(0, 0, 0, 0.9) 100%);
   }
 
@@ -206,7 +206,7 @@
     display: grid;
     justify-items: center;
     gap: 0.5rem;
-    filter: drop-shadow(0 6px 22px rgba(0, 0, 0, 0.7)) drop-shadow(0 0 46px rgba(235, 203, 110, 0.22));
+    filter: drop-shadow(0 6px 22px rgba(0, 0, 0, 0.7)) drop-shadow(0 0 46px rgba(232, 176, 75, 0.24));
   }
   .logo-mark { width: clamp(72px, 13vw, 108px); height: auto; color: var(--h-ink); }
 
@@ -262,7 +262,7 @@
     border-radius: 50%;
     background: var(--h-accent);
     color: #fff;
-    box-shadow: 0 16px 34px -10px rgba(236, 59, 34, 0.7);
+    box-shadow: 0 16px 34px -10px rgba(234, 76, 27, 0.7);
   }
   .scroll-cue__btn svg { width: 30px; height: 30px; }
   .scroll-cue__btn::after {
